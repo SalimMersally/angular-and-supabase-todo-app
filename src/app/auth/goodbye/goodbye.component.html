@@ -1,0 +1,26 @@
+<div
+  class="flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-6 px-4 sm:px-6 lg:px-8 min-h-screen"
+>
+  <div class="max-w-md w-full">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+      <div class="text-center">
+        <img src="/favicon.svg" alt="Todo App" class="mx-auto h-16 w-16 mb-4" />
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Goodbye!</h2>
+        <p class="text-lg text-gray-600 dark:text-gray-400 mb-4">
+          You have been successfully signed out.
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-500 mb-6">
+          Thank you for using Todo App. We hope to see you again soon!
+        </p>
+
+        <div class="space-y-4">
+          <p class="text-xs text-gray-400 dark:text-gray-600">
+            You will be redirected to the sign-in page in 5 seconds...
+          </p>
+
+          <p-button label="Sign In Again" (onClick)="navigateToSignIn()" class="w-full" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

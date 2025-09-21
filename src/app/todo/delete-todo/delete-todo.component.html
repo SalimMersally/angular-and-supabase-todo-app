@@ -1,0 +1,14 @@
+<p-button
+  [icon]="deleting() ? 'pi pi-spin pi-spinner' : 'pi pi-trash'"
+  severity="danger"
+  size="small"
+  [text]="true"
+  [loading]="deleting()"
+  [disabled]="deleting()"
+  (onClick)="deleteTodo()"
+  pTooltip="Delete todo"
+  tooltipPosition="top"
+  class="p-button-sm"
+/>
+
+<p-confirmDialog />

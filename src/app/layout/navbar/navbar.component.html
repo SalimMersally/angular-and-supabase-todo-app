@@ -1,0 +1,44 @@
+<nav class="bg-white dark:bg-gray-800 text-gray-800 dark:text-white p-4 shadow-lg">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <button
+        (click)="navigateToHome()"
+        class="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+      >
+        <img src="/favicon.svg" alt="Todo App Icon" class="w-8 h-8" />
+        <h1 class="text-xl font-bold">{{ appName }}</h1>
+      </button>
+    </div>
+
+    <div class="flex items-center gap-3">
+      @if (authService.isLoading()) {
+      <div class="animate-pulse flex items-center gap-2">
+        <div class="h-4 w-16 bg-gray-300 dark:bg-gray-600 rounded"></div>
+        <div class="h-4 w-12 bg-gray-300 dark:bg-gray-600 rounded"></div>
+      </div>
+      } @else if (authService.isAuthenticated()) {
+      <span class="text-sm text-gray-600 dark:text-gray-400 hidden sm:block">
+        Welcome, {{ authService.currentUser()?.user_metadata?.['first_name'] || 'User' }}!
+      </span>
+      <p-button
+        label="Sign Out"
+        severity="secondary"
+        [text]="true"
+        (onClick)="signOut()"
+        size="small"
+      />
+      } @else {
+      <p-button label="Sign In" [text]="true" (onClick)="navigateToSignIn()" size="small" />
+      }
+
+      <p-button
+        [icon]="isDark() ? 'pi pi-sun' : 'pi pi-moon'"
+        [text]="true"
+        [rounded]="true"
+        [ariaLabel]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+        (onClick)="toggleTheme()"
+        size="large"
+      />
+    </div>
+  </div>
+</nav>

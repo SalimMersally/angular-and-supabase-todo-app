@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <style>
+    .todo-icon { fill: #10b981; }
+    @media (prefers-color-scheme: dark) {
+      .todo-icon { fill: #34d399; }
+    }
+  </style>
+  <path class="todo-icon" d="M977.2 782.8v-736H46.8v930.4h889.1v-76H122.8V122.8h778.4v660z"/>
+  <path class="todo-icon" d="M274.8 459.8L227.2 519l244.2 196 385.1-373.3-52.9-54.6-336.9 326.7z"/>
+</svg>

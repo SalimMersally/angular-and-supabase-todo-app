@@ -1,0 +1,194 @@
+<div class="flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+      <div class="text-center mb-6">
+        <img src="/favicon.svg" alt="Todo App" class="mx-auto h-16 w-16 mb-2" />
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white">Create your account</h2>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Start managing your todos today</p>
+      </div>
+
+      <!-- Error Message -->
+      @if (errorMessage()) {
+      <div class="mb-4">
+        <p-message severity="error" [text]="errorMessage()!" class="w-full" />
+      </div>
+      }
+
+      <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="space-y-3">
+          <!-- First Name -->
+          <div>
+            <label
+              for="firstName"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+              First Name *
+            </label>
+            <input
+              pInputText
+              id="firstName"
+              formControlName="firstName"
+              placeholder="Enter your first name"
+              class="w-full"
+              [class.ng-invalid]="firstName?.invalid && firstName?.dirty"
+            />
+            <div class="h-4 mt-1">
+              @if (firstName?.invalid && firstName?.dirty) {
+              <small class="text-red-500">
+                @if (firstName?.errors?.['required']) {
+                <span>First name is required</span>
+                } @if (firstName?.errors?.['minlength']) {
+                <span>First name must be at least 2 characters</span>
+                }
+              </small>
+              }
+            </div>
+          </div>
+
+          <!-- Last Name -->
+          <div>
+            <label
+              for="lastName"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+              Last Name *
+            </label>
+            <input
+              pInputText
+              id="lastName"
+              formControlName="lastName"
+              placeholder="Enter your last name"
+              class="w-full"
+              [class.ng-invalid]="lastName?.invalid && lastName?.dirty"
+            />
+            <div class="h-4 mt-1">
+              @if (lastName?.invalid && lastName?.dirty) {
+              <small class="text-red-500">
+                @if (lastName?.errors?.['required']) {
+                <span>Last name is required</span>
+                } @if (lastName?.errors?.['minlength']) {
+                <span>Last name must be at least 2 characters</span>
+                }
+              </small>
+              }
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label
+              for="email"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+              Email Address *
+            </label>
+            <input
+              pInputText
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="Enter your email"
+              class="w-full"
+              [class.ng-invalid]="email?.invalid && email?.dirty"
+            />
+            <div class="h-4 mt-1">
+              @if (email?.invalid && email?.dirty) {
+              <small class="text-red-500">
+                @if (email?.errors?.['required']) {
+                <span>Email is required</span>
+                } @if (email?.errors?.['email']) {
+                <span>Please enter a valid email address</span>
+                }
+              </small>
+              }
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label
+              for="password"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+              Password *
+            </label>
+            <p-password
+              formControlName="password"
+              placeholder="Enter your password"
+              [feedback]="true"
+              [toggleMask]="true"
+              class="w-full [&_.p-password]:w-full [&_.p-inputtext]:w-full [&_.p-password-toggle]:cursor-pointer"
+              [class.ng-invalid]="password?.invalid && password?.dirty"
+            />
+            <div class="h-4 mt-1">
+              @if (password?.invalid && password?.dirty) {
+              <small class="text-red-500">
+                @if (password?.errors?.['required']) {
+                <span>Password is required</span>
+                } @if (password?.errors?.['minlength']) {
+                <span>Password must be at least 6 characters</span>
+                }
+              </small>
+              }
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div>
+            <label
+              for="confirmPassword"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            >
+              Confirm Password *
+            </label>
+            <p-password
+              formControlName="confirmPassword"
+              placeholder="Confirm your password"
+              [feedback]="false"
+              [toggleMask]="true"
+              class="w-full [&_.p-password]:w-full [&_.p-inputtext]:w-full [&_.p-password-toggle]:cursor-pointer"
+              [class.ng-invalid]="confirmPassword?.invalid && confirmPassword?.dirty"
+            />
+            <div class="h-4 mt-1">
+              @if (confirmPassword?.invalid && confirmPassword?.dirty) {
+              <small class="text-red-500">
+                @if (confirmPassword?.errors?.['required']) {
+                <span>Please confirm your password</span>
+                }
+              </small>
+              } @if (signUpForm.errors?.['passwordMismatch'] && confirmPassword?.dirty) {
+              <small class="text-red-500">
+                <span>Passwords do not match</span>
+              </small>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end">
+          <p-button
+            type="submit"
+            label="Create Account"
+            [loading]="isLoading()"
+            [disabled]="signUpForm.invalid || isLoading()"
+          />
+        </div>
+
+        <!-- Sign In Link -->
+        <div class="text-center">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            Already have an account?
+            <button
+              type="button"
+              (click)="navigateToSignIn()"
+              class="font-medium text-emerald-600 hover:text-emerald-500 dark:text-emerald-400 dark:hover:text-emerald-300 ml-1 cursor-pointer"
+            >
+              Sign in here
+            </button>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

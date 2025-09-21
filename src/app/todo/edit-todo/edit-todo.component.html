@@ -1,0 +1,163 @@
+<p-button
+  [icon]="loading() ? 'pi pi-spin pi-spinner' : 'pi pi-pencil'"
+  severity="secondary"
+  size="small"
+  [text]="true"
+  [loading]="loading()"
+  [disabled]="loading()"
+  (onClick)="openModal()"
+  pTooltip="Edit todo"
+  tooltipPosition="top"
+  class="p-button-sm"
+/>
+
+<p-dialog
+  header="Edit Todo"
+  [modal]="true"
+  [visible]="visible()"
+  (onHide)="hide()"
+  (visibleChange)="visible.set($event)"
+  [closable]="true"
+  [closeOnEscape]="true"
+  [style]="{ width: '500px' }"
+  [draggable]="false"
+  [resizable]="false"
+  class="p-fluid"
+>
+  <form [formGroup]="todoForm" (ngSubmit)="onSave()">
+    @if (loading()) {
+    <div class="flex flex-col p-4">
+      <div class="flex flex-col mb-2">
+        <p-skeleton width="3rem" height="1rem" class="mb-2"></p-skeleton>
+        <p-skeleton width="100%" height="2.5rem"></p-skeleton>
+        <div class="h-5 mt-1"></div>
+      </div>
+
+      <div class="flex flex-col mb-2">
+        <p-skeleton width="4rem" height="1rem" class="mb-2"></p-skeleton>
+        <p-skeleton width="100%" height="4rem"></p-skeleton>
+        <div class="h-5 mt-1"></div>
+      </div>
+
+      <div class="flex flex-col mb-2">
+        <p-skeleton width="4rem" height="1rem" class="mb-2"></p-skeleton>
+        <p-skeleton width="100%" height="2.5rem"></p-skeleton>
+        <div class="h-5 mt-1"></div>
+      </div>
+
+      <div class="flex flex-col">
+        <p-skeleton width="3rem" height="1rem" class="mb-2"></p-skeleton>
+        <p-skeleton width="100%" height="2.5rem"></p-skeleton>
+        <div class="h-5 mt-1"></div>
+      </div>
+    </div>
+    } @else {
+    <div class="flex flex-col p-4">
+      <div class="flex flex-col mb-2">
+        <label for="edit-title" class="block text-sm font-medium mb-2">Title *</label>
+        <input
+          pInputText
+          id="edit-title"
+          formControlName="title"
+          placeholder="Enter todo title"
+          class="w-full"
+          autocomplete="off"
+          [class.ng-invalid]="title?.invalid && title?.dirty"
+        />
+        <div class="h-5 mt-1">
+          @if (title?.invalid && title?.dirty) {
+          <small class="text-red-500">
+            @if (title?.errors?.['required']) {
+            <span>Title is required</span>
+            } @if (title?.errors?.['minlength']) {
+            <span>Title must be at least 3 characters</span>
+            }
+          </small>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col mb-2">
+        <label for="edit-description" class="block text-sm font-medium mb-2">Description *</label>
+        <textarea
+          pTextarea
+          id="edit-description"
+          formControlName="description"
+          placeholder="Enter todo description"
+          rows="3"
+          class="w-full"
+          [class.ng-invalid]="description?.invalid && description?.dirty"
+        ></textarea>
+        <div class="h-5 mt-1">
+          @if (description?.invalid && description?.dirty) {
+          <small class="text-red-500">
+            @if (description?.errors?.['required']) {
+            <span>Description is required</span>
+            } @if (description?.errors?.['minlength']) {
+            <span>Description must be at least 5 characters</span>
+            }
+          </small>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col mb-2">
+        <label for="edit-dueDate" class="block text-sm font-medium mb-2">Due Date *</label>
+        <p-datePicker
+          formControlName="dueDate"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+          iconDisplay="input"
+          placeholder="Select due date"
+          class="w-full"
+          appendTo="body"
+          [class.ng-invalid]="dueDate?.invalid && dueDate?.dirty"
+        />
+        <div class="h-5 mt-1">
+          @if (dueDate?.invalid && dueDate?.dirty) {
+          <small class="text-red-500">
+            @if (dueDate?.errors?.['required']) {
+            <span>Due date is required</span>
+            }
+          </small>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label for="edit-priority" class="block text-sm font-medium mb-2">Priority *</label>
+        <p-select
+          formControlName="priority"
+          [options]="priorityOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select priority"
+          class="w-full"
+          appendTo="body"
+        />
+        <div class="h-5 mt-1">
+          <!-- Priority doesn't need validation as it has a default value -->
+        </div>
+      </div>
+    </div>
+    }
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        (onClick)="hide()"
+        type="button"
+        [disabled]="saving() || loading()"
+      />
+      <p-button
+        [label]="saving() ? 'Saving...' : 'Save'"
+        [loading]="saving()"
+        (onClick)="onSave()"
+        [disabled]="todoForm.invalid || !hasFormChanged() || saving() || loading()"
+      />
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,124 @@
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">My Todos</h2>
+    <app-add-todo (todoAdded)="loadTodos()" />
+  </div>
+
+  <p-table [value]="tableData()" [tableStyle]="{ 'min-width': '50rem', 'table-layout': 'fixed' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 80px">Status</th>
+        <th style="width: 200px">Title</th>
+        <th style="width: 300px">Description</th>
+        <th style="width: 120px" class="cursor-pointer" (click)="onDueDateSort()">
+          <div class="flex justify-between items-center gap-2">
+            <span>Due Date</span>
+            @if (sortField() === 'due_date') { @if (sortOrder() === 'asc') {
+            <i class="pi pi-sort-up text-emerald-500"></i>
+            } @else if (sortOrder() === 'desc') {
+            <i class="pi pi-sort-down text-emerald-500"></i>
+            } } @else {
+            <i class="pi pi-sort text-gray-400"></i>
+            }
+          </div>
+        </th>
+        <th style="width: 100px">Priority</th>
+        <th style="width: 100px">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+      @if (item.isLoading) {
+      <tr>
+        <td>
+          <p-skeleton width="20px" height="20px" borderRadius="4px"></p-skeleton>
+        </td>
+        <td>
+          <p-skeleton width="150px" height="20px" borderRadius="4px"></p-skeleton>
+        </td>
+        <td>
+          <p-skeleton width="250px" height="20px" borderRadius="4px"></p-skeleton>
+        </td>
+        <td>
+          <p-skeleton width="100px" height="20px" borderRadius="4px"></p-skeleton>
+        </td>
+        <td>
+          <p-skeleton width="80px" height="24px" borderRadius="16px"></p-skeleton>
+        </td>
+        <td>
+          <div class="flex gap-1">
+            <p-skeleton width="32px" height="32px" borderRadius="4px"></p-skeleton>
+            <p-skeleton width="32px" height="32px" borderRadius="4px"></p-skeleton>
+          </div>
+        </td>
+      </tr>
+      } @else {
+      <tr>
+        <td>
+          <p-checkbox
+            [binary]="true"
+            [(ngModel)]="item.isCompleted"
+            (onChange)="onStatusChange(item)"
+            [ariaLabel]="'Mark todo as ' + (item.isCompleted ? 'incomplete' : 'complete')"
+          >
+          </p-checkbox>
+        </td>
+        <td>
+          <span
+            [class.line-through]="item.isCompleted"
+            class="block truncate"
+            [pTooltip]="item.title"
+            tooltipPosition="top"
+          >
+            {{ item.title }}
+          </span>
+        </td>
+        <td>
+          <span
+            [class.line-through]="item.isCompleted"
+            class="block truncate"
+            [pTooltip]="item.description"
+            tooltipPosition="top"
+          >
+            {{ item.description }}
+          </span>
+        </td>
+        <td>
+          <span [class.line-through]="item.isCompleted">
+            {{ item.dueDate | date : 'MMM dd, yyyy' }}
+          </span>
+        </td>
+        <td>
+          <p-tag
+            [value]="item.priority"
+            [severity]="getPrioritySeverity(item.priority)"
+            [icon]="getPriorityIcon(item.priority)"
+            [class.opacity-50]="item.isCompleted"
+          >
+          </p-tag>
+        </td>
+        <td>
+          <div class="flex gap-1">
+            <app-edit-todo [todoId]="item.id" (todoUpdated)="loadTodos()" />
+            <app-delete-todo
+              [todoId]="item.id"
+              [todoTitle]="item.title"
+              (todoDeleted)="loadTodos()"
+            />
+          </div>
+        </td>
+      </tr>
+      }
+    </ng-template>
+  </p-table>
+
+  <p-paginator
+    [rows]="pageSize()"
+    [totalRecords]="totalRecords()"
+    [first]="(currentPage() - 1) * pageSize()"
+    [rowsPerPageOptions]="[5, 10, 20, 50]"
+    (onPageChange)="onPageChange($event)"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} todos"
+  ></p-paginator>
+</div>
